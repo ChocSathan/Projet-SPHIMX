@@ -10,7 +10,7 @@ h1 {
 }
 
 input[type="text"] {
-    padding: 5px;
+    padding: 1%;
     margin: 10px 0;
     width: 200px;
     background-color: #333;
@@ -19,7 +19,7 @@ input[type="text"] {
 }
 
 button {
-    padding: 5px 10px;
+    padding: 1% 10px;
     margin: 5px;
     cursor: pointer;
     background-color: #333;
@@ -28,7 +28,24 @@ button {
     font-size: 1.1em;
 }
 
-table {
+#editorMenu {
+    display: none;
+}
+
+#editorMenu input[type="text"] {
+    padding: 0.5%;
+    margin: 5px 0;
+    width: 180px; /* Increased width */
+    font-size: 0.9em;
+}
+
+#editorMenu button {
+    padding: 0.5% 5px;
+    margin: 3px;
+    font-size: 0.9em;
+}
+
+#table {
     margin-left: auto;
     margin-right: auto;
     width: 90%;
@@ -42,7 +59,7 @@ th, td {
     padding: 10px;
     text-align: center;
     border: 1px solid #444;
-    font-size: 1.2em;
+    font-size: 1.5em; /* Increased font size */
 }
 
 th {
@@ -68,4 +85,18 @@ button#addButton {
 button#removeButton {
     background-color: #f44336;
     color: white;
+}
+
+footer {
+    margin-top: 30%;
+}
+
+#revenues {
+    margin-right: auto;
+    margin-left: 5%;
+    width: 25%;
+    border-collapse: collapse;
+    margin-top: 5%;
+    background-color: #333;
+    color: #e0e0e0;
 }

@@ -6,6 +6,7 @@ function add() {
     nonMembreCell.childNodes[0].nodeValue = currentValue + 1;
     // Save the data
     save();
+    calculateRevenues();
 }
 
 function remove() {
@@ -17,6 +18,7 @@ function remove() {
         nonMembreCell.childNodes[0].nodeValue = currentValue - 1;
         // Save the data
         save();
+        calculateRevenues();
     }
 }
 
@@ -30,6 +32,7 @@ function removeMenu() {
             table.deleteRow(1);
         }
         save();
+        calculateRevenues();
         return;
     }
 
@@ -40,6 +43,7 @@ function removeMenu() {
             table.deleteRow(i);
             found = true;
             save();
+            calculateRevenues();
             break;
         }
     }
@@ -50,9 +54,11 @@ function removeMenu() {
 }
 
 function addMenu() {
-    let menuName = document.getElementById('inputAddMenu').value;
-    if (menuName.trim() === '') {
-        alert('Please enter a menu name');
+    let menuName = document.getElementById('inputAddMenuName').value;
+    let priceNonMembre = parseFloat(document.getElementById('inputAddMenuPriceNonMembre').value).toFixed(2);
+    let priceMembre = parseFloat(document.getElementById('inputAddMenuPriceMembre').value).toFixed(2);
+    if (menuName.trim() === '' || isNaN(priceNonMembre) || isNaN(priceMembre)) {
+        alert('Please enter a valid menu name and/or prices');
         return;
     }
 
@@ -61,6 +67,8 @@ function addMenu() {
     let cell1 = newRow.insertCell(0);
     let cell2 = newRow.insertCell(1);
     let cell3 = newRow.insertCell(2);
+    let cell4 = newRow.insertCell(3);
+    let cell5 = newRow.insertCell(4);
 
     cell1.appendChild(document.createTextNode(menuName));
     cell2.innerHTML = `0<br>
@@ -69,8 +77,10 @@ function addMenu() {
     cell3.innerHTML = `0<br>
         <button id="addButton" onclick="add()">+</button>
         <button id="removeButton" onclick="remove()">-</button>`;
-
+    cell4.appendChild(document.createTextNode(priceNonMembre));
+    cell5.appendChild(document.createTextNode(priceMembre));
     save();
+    calculateRevenues();
 }
 
 function createBackup() {
@@ -213,6 +223,7 @@ function load() {
                 }
             });
         });
+        calculateRevenues();
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -229,4 +240,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Load data from the server
     load();
+    calculateRevenues();
 });
+
+function toggleEditor() {
+    let editor = document.getElementById('editorMenu');
+    if (editor.style.display === 'block') {
+        editor.style.display = 'none';
+    } else {
+        editor.style.display = 'block';
+    }
+}
+
+function calculateRevenues() {
+    let table = document.getElementById('table');
+    let total = 0;
+
+    for (let i = 1; i < table.rows.length; i++) {
+        let row = table.rows[i];
+        let nonMembreCount = parseInt(row.cells[1].childNodes[0].nodeValue);
+        let membreCount = parseInt(row.cells[2].childNodes[0].nodeValue);
+        let priceNonMembre = parseFloat(row.cells[3].childNodes[0].nodeValue);
+        let priceMembre = parseFloat(row.cells[4].childNodes[0].nodeValue);
+
+        total += (nonMembreCount * priceNonMembre) + (membreCount * priceMembre);
+    }
+
+    document.getElementById('total').innerText = total.toFixed(2);
+}

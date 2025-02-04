@@ -28,8 +28,12 @@ server.listen(PORT, () => {
 
 // Route to handle saving data
 app.post('/save', (req, res) => {
-    const data = req.body.map(row => row.slice(0, 3)); // Only save the first 3 columns
-    const header = ['libMenu', 'Non-Membre', 'Membre']; // Define the header row
+    const data = req.body.map(row => {
+        row[3] = parseFloat(row[3]).toFixed(2); // Format Prix Non-Membre
+        row[4] = parseFloat(row[4]).toFixed(2); // Format Prix Membre
+        return row;
+    });
+    const header = ['libMenu', 'Non-Membre', 'Membre', 'Prix Non-Membre', 'Prix Membre']; // Define the header row
     const csvData = [header, ...data]; // Include the header row in the data
     const csv = papaparse.unparse(csvData);
     fs.writeFile(path.join(__dirname, 'data.csv'), csv, (err) => {
@@ -57,7 +61,7 @@ app.get('/load', (req, res) => {
 // Route to handle creating a backup
 app.post('/createBackup', (req, res) => {
     const { backupName, data } = req.body;
-    const header = ['libMenu', 'Non-Membre', 'Membre']; // Define the header row
+    const header = ['libMenu', 'Non-Membre', 'Membre', 'Prix Non-Membre', 'Prix Membre']; // Define the header row
     const csvData = [header, ...data]; // Include the header row in the data
     const csv = papaparse.unparse(csvData);
     const backupPath = path.join(__dirname, 'backups', `${backupName}.csv`);
