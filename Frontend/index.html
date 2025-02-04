@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventes SPHIMX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Sheet Ventes SPHIMX</h1>    
+    <input type="text" id="inputAddMenu" onkeydown="pressAddMenu()" placeholder="Enter menu name">
+    <button id="addMenu" onclick="addMenu()">Add Menu</button><br>
+    <input type="text" id="inputRemoveMenu" onkeydown="pressRemoveMenu()" placeholder="Enter menu name">
+    <button id="removeMenu" onclick="removeMenu()">Remove Menu</button><br>
+    <input type="text" id="inputBackupName" onkeydown="pressCreateBackup()" placeholder="Enter Backup name">
+    <button id="createBackup" onclick="createBackup()">Create Backup</button><br>
+    <table id="table" border="1">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Non-Membre</th>
+                <th>Membre</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="line1">
+                <td id="libmenu">menu1</td>
+                <td id="nonMembre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+                <td id="membre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+            </tr>
+            <tr id="line2">
+                <td id="libmenu">menu2</td>
+                <td id="nonMembre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+                <td id="membre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="app.js"></script>
+</body>
+</html>
