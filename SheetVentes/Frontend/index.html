@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ventes SPHIMX</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Sheet Ventes SPHIMX</h1>
+    <button id="editorButton" onclick="toggleEditor()">Activer/Desactiver Mode Editeur</button>
+    <div id="editorMenu">
+    <div>
+    <input type="text" id="inputAddMenuName" onkeydown="pressAddMenu()" placeholder="Entrez Nom du Menu"><br>
+    <input type="text" id="inputAddMenuPriceNonMembre" onkeydown="pressAddMenu()" placeholder="Entrez Prix pour les Non-Membres">
+    <button id="addMenu" onclick="addMenu()">Add Menu</button><br>
+    <input type="text" id="inputAddMenuPriceMembre" onkeydown="pressAddMenu()" placeholder="Entrez Prix pour les Membres"><br>
+    </div>
+    <input type="text" id="inputRemoveMenu" onkeydown="pressRemoveMenu()" placeholder="Entrez Nom du Menu">
+    <button id="removeMenu" onclick="removeMenu()">Remove Menu</button><br>
+    <input type="text" id="inputBackupName" onkeydown="pressCreateBackup()" placeholder="Entrez Nom du Backup">
+    <button id="createBackup" onclick="createBackup()">Create Backup</button><br>
+    </div>
+    <table id="table" border="1">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Non-Membre</th>
+                <th>Membre</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="line1">
+                <td id="libmenu">menu1</td>
+                <td id="nonMembre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+                <td id="membre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+            </tr>
+            <tr id="line2">
+                <td id="libmenu">menu2</td>
+                <td id="nonMembre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+                <td id="membre">0<br>
+                    <button id="addButton" onclick="add()">+</button>
+                    <button id="removeButton" onclick="remove()">-</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="revenues" border="1">
+        <thead>
+            <tr>
+                <th>revenues</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="total">0.00</td>
+            </tr>
+        </tbody>
+    </table>
+    <footer></footer>
+    <script src="app.js"></script>
+</body>
+</html>
