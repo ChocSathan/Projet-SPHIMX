@@ -3,66 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ventes SPHIMX</title>
+    <title>Calcul SPHIMX</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Sheet Ventes SPHIMX</h1>
-    <button id="editorButton" onclick="toggleEditor()">Activer/Desactiver Mode Editeur</button>
+    <h1>Sheet Calcul SPHIMX</h1>
     <div id="editorMenu">
-    <div>
-    <input type="text" id="inputAddMenuName" onkeydown="pressAddMenu()" placeholder="Entrez Nom du Menu"><br>
-    <input type="text" id="inputAddMenuPriceNonMembre" onkeydown="pressAddMenu()" placeholder="Entrez Prix pour les Non-Membres">
-    <button id="addMenu" onclick="addMenu()">Add Menu</button><br>
-    <input type="text" id="inputAddMenuPriceMembre" onkeydown="pressAddMenu()" placeholder="Entrez Prix pour les Membres"><br>
+        <input type="text" id="inputAddBackup" onkeydown="pressAddBackup()" placeholder="Entrez Nom du Backup">
+        <button id="removeMenu" onclick="addBackup()">Add Backup</button><br>
+        <input type="text" id="inputRemoveBackup" onkeydown="pressRemoveBackup()" placeholder="Entrez Nom du Backup">
+        <button id="removeMenu" onclick="removeBackup()">Remove Backup</button><br>
     </div>
-    <input type="text" id="inputRemoveMenu" onkeydown="pressRemoveMenu()" placeholder="Entrez Nom du Menu">
-    <button id="removeMenu" onclick="removeMenu()">Remove Menu</button><br>
-    <input type="text" id="inputBackupName" onkeydown="pressCreateBackup()" placeholder="Entrez Nom du Backup">
-    <button id="createBackup" onclick="createBackup()">Create Backup</button><br>
-    </div>
-    <table id="table" border="1">
+    <table id="quantité" class="table" border="1">
+        <caption>Quantité</caption>
         <thead>
             <tr>
-                <th></th>
+                <th>Nom Backup</th>
+                <th>Nom Menu</th>
                 <th>Non-Membre</th>
                 <th>Membre</th>
+                <th>Total Menu</th>
+                <th>Total Backup</th>
             </tr>
         </thead>
         <tbody>
-            <tr id="line1">
+            <tr id="exemple">
+                <td id="libBackup" rowspan="2">Backup1</td>
                 <td id="libmenu">menu1</td>
-                <td id="nonMembre">0<br>
-                    <button id="addButton" onclick="add()">+</button>
-                    <button id="removeButton" onclick="remove()">-</button>
-                </td>
-                <td id="membre">0<br>
-                    <button id="addButton" onclick="add()">+</button>
-                    <button id="removeButton" onclick="remove()">-</button>
-                </td>
+                <td id="nonMembre">0</td>
+                <td id="membre">0</td>
+                <td id="totalMenu">0</td>
+                <td id="totalBackup" rowspan="2">0</td>
             </tr>
-            <tr id="line2">
+            <tr id="exemple">
                 <td id="libmenu">menu2</td>
-                <td id="nonMembre">0<br>
-                    <button id="addButton" onclick="add()">+</button>
-                    <button id="removeButton" onclick="remove()">-</button>
-                </td>
-                <td id="membre">0<br>
-                    <button id="addButton" onclick="add()">+</button>
-                    <button id="removeButton" onclick="remove()">-</button>
-                </td>
+                <td id="nonMembre">0</td>
+                <td id="membre">0</td>
+                <td id="totalMenu">0</td>
+            </tr>
+            <tr id="exemple">
+                <td id="libBackup" rowspan="1">Backup2</td>
+                <td id="libmenu">menu1</td>
+                <td id="nonMembre">0</td>
+                <td id="membre">0</td>
+                <td id="totalMenu">0</td>
+                <td id="totalBackup" rowspan="1">0</td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr id="TotalRow">
+                <td id="libTotal" colspan="2">Totals</td>
+                <td id="totalNonMembres">0</td>
+                <td id="totalMembres">0</td>
+                <td id="totals" colspan="2">0</td>
+            </tr>
+        </tfoot>
     </table>
-    <table id="revenues" border="1">
+    <table id="revenues" class="table" border="1">
+        <caption>Revenues</caption>
         <thead>
             <tr>
-                <th>revenues</th>
+                <th>Nom Backup</th>
+                <th>Nom Menu</th>
+                <th>Non-Membre</th>
+                <th>Membre</th>
+                <th>Total Menu</th>
+                <th>Total Backup</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="exemple">
+                <td id="libBackup" rowspan="2">Backup1</td>
+                <td id="libmenu">menu1</td>
+                <td id="nonMembre">0</td>
+                <td id="membre">0</td>
+                <td id="totalMenu">0</td>
+                <td id="totalBackup" rowspan="2">0</td>
+            </tr>
+            <tr id="exemple">
+                <td id="libmenu">menu2</td>
+                <td id="nonMembre">0</td>
+                <td id="membre">0</td>
+                <td id="totalMenu">0</td>
+            </tr>
+            <tr id="exemple">
+                <td id="libBackup" rowspan="1">Backup2</td>
+                <td id="libmenu">menu1</td>
+                <td id="nonMembre">0</td>
+                <td id="membre">0</td>
+                <td id="totalMenu">0</td>
+                <td id="totalBackup" rowspan="1">0</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr id="TotalRow">
+                <td id="libTotal" colspan="2">Totals</td>
+                <td id="totalNonMembres">0</td>
+                <td id="totalMembres">0</td>
+                <td id="totals" colspan="2">0</td>
+            </tr>
+        </tfoot>
+    </table>
+    <table id="benef" class="table" border="1"> 
+        <thead>
+            <tr>
+                <th>revenues total</th>
+                <th>cout total</th>
+                <th>benef total</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td id="total">0.00</td>
+                <td id="revenuesTotal">0</td>
+                <td id="coutTotal"><input type="number"></td>
+                <td id="benefTotal">0</td>
             </tr>
         </tbody>
     </table>

@@ -29,7 +29,7 @@ button {
 }
 
 #editorMenu {
-    display: none;
+    display: block;
 }
 
 #editorMenu input[type="text"] {
@@ -45,14 +45,23 @@ button {
     font-size: 0.9em;
 }
 
-#table {
-    margin-left: auto;
-    margin-right: auto;
-    width: 90%;
+.table {
+    margin-left: 5%;
+    width: 35%; /* Reduced width */
     border-collapse: collapse;
     margin-top: 5%;
     background-color: #333;
     color: #e0e0e0;
+}
+
+#quantité {
+    float: left;
+    margin-right: 5%; /* Added margin to separate tables */
+}
+
+#revenues {
+    margin-right: 5%;
+    margin-left: 5%; /* Added margin to separate tables */
 }
 
 th, td {
@@ -64,17 +73,12 @@ th, td {
 
 th {
     background-color: #444;
-    height: calc(9 * (100vw / 16 / 12)); /* Adjust height to maintain 16:9 ratio */
+    height: calc(4 * (100vw / 16 / 12)); /* Further reduced height to maintain 16:9 ratio */
 }
 
 td {
     border: 1px solid #444;
-    height: calc(3 * (100vw / 4 / 12)); /* Adjust height to maintain 4:3 ratio */
-}
-
-/* Hide columns beyond the third one */
-table th:nth-child(n+4), table td:nth-child(n+4) {
-    display: none;
+    height: calc(1.5 * (100vw / 4 / 12)); /* Further reduced height to maintain 4:3 ratio */
 }
 
 button#addButton {
@@ -89,14 +93,4 @@ button#removeButton {
 
 footer {
     margin-top: 30%;
-}
-
-#revenues {
-    margin-right: auto;
-    margin-left: 5%;
-    width: 25%;
-    border-collapse: collapse;
-    margin-top: 5%;
-    background-color: #333;
-    color: #e0e0e0;
 }
