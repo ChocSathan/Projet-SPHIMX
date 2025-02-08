@@ -31,7 +31,12 @@ function totalQBackup(backupName) {
             const rows = parsedData.slice(1);
             rows.forEach(row => {
                 if (row[0] === backupName) {
-                    total += parseInt(row[2]) + parseInt(row[3]);
+                    if (row[2] === '' || row[3] === '') {
+                        console.error('Error reading CSV file: Invalid data');
+                        return reject('Failed to load data');
+                    } else {
+                        total += parseInt(row[2]) + parseInt(row[3]);
+                    }
                 }
             });
             let newTotal = total.toString();
@@ -53,7 +58,12 @@ function totalRBackup(backupName) {
             const rows = parsedData.slice(1);
             rows.forEach(row => {
                 if (row[0] === backupName) {
-                    total += parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5]);
+                    if (row[2] === '' || row[3] === '' || row[4] === '' || row[5] === '') {
+                        console.error('Error reading CSV file: Invalid data');
+                        return reject('Failed to load data');
+                    } else {
+                        total += parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5]);
+                    }
                 }
             });
             let newTotal = total.toFixed(2).toString();
@@ -188,6 +198,11 @@ app.get('/load_total_quantity', async (req, res) => {
         const rows = parsedData.slice(1);
         let totals = [0, 0, 0];
         rows.forEach(row => {
+            if (row[2] === '' ) {
+                row[2] = '0';
+            } if (row[3] === '') {
+                row[3] = '0';
+            }
             totals[0] += parseInt(row[2]);
             totals[1] += parseInt(row[3]);
             totals[2] += parseInt(row[2]) + parseInt(row[3]);
@@ -231,6 +246,15 @@ app.get('/load_total_revenues', async (req, res) => {
         const rows = parsedData.slice(1);
         let totals = [0, 0, 0];
         rows.forEach(row => {
+            if (row[2] === '' ) {
+                row[2] = '0';
+            } if (row[3] === '') {
+                row[3] = '0';
+            } if (row[4] === '') {
+                row[4] = '0';
+            } if (row[5] === '') {
+                row[5] = '0';
+            }
             totals[0] += parseInt(row[2]) * parseFloat(row[4]);
             totals[1] += parseInt(row[3]) * parseFloat(row[5]);
             totals[2] += (parseInt(row[2]) * parseFloat(row[4])) + (parseInt(row[3]) * parseFloat(row[5]));
@@ -294,7 +318,9 @@ app.get('*', (req, res) => {
 });
 
 //Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 server.listen(PORT, '127.0.0.1', () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`SheetCalcul Server running at http://localhost:${PORT}`);
 });
+
+export default app;

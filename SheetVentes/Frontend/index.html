@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <button onclick="window.location.href='http://127.0.0.1:3000'">Return to Hub</button>
     <h1>Sheet Ventes SPHIMX</h1>
     <button id="editorButton" onclick="toggleEditor()">Activer/Desactiver Mode Editeur</button>
     <div id="editorMenu">RemoveMenu
     <div>
     <input type="text" id="inputAddMenuName" onkeydown="pressAddMenu()" placeholder="Entrez Nom du Menu"><br>
-    <input type="number" class="numberInput" id="inputAddMenuPriceNonMembre" onkeydown="pressAddMenu()" placeholder="Entrez Prix pour les Non-Membres">
+    <input type="number" class="numberInput" id="inputAddMenuPriceNonMembre" onkeydown="pressAddMenu()" placeholder="Prix Non-Membres">
     <button id="addMenu" onclick="addMenu()">Add Menu</button><br>
-    <input type="number" class="numberInput" id="inputAddMenuPriceMembre" onkeydown="pressAddMenu()" placeholder="Entrez Prix pour les Membres"><br>
+    <input type="number" class="numberInput" id="inputAddMenuPriceMembre" onkeydown="pressAddMenu()" placeholder="Prix Membres"><br>
     </div>
     <select id="selectRemoveMenu"></select>
     <button id="removeMenu" onclick="removeMenu()">Remove Menu</button><br>

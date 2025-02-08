@@ -12,22 +12,16 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const server = http.createServer(app);
 
+const router = express.Router();
+
 // Middleware to parse JSON bodies
-app.use(express.json());
+router.use(express.json());
 
 // Serve static files from the frontend directory
-app.use(express.static(path.join(__dirname, '../Frontend')));
-
-
-//Start the server
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  const localIp = getLocalIpAddress();
-  console.log(`Server running at http://${localIp}:${PORT}`);
-});
+router.use(express.static(path.join(__dirname, '../Frontend')));
 
 // Route to handle saving data
-app.post('/save', (req, res) => {
+router.post('/save', (req, res) => {
     const data = req.body.map(row => {
         row[3] = parseFloat(row[3]).toFixed(2); // Format Prix Non-Membre
         row[4] = parseFloat(row[4]).toFixed(2); // Format Prix Membre
@@ -46,7 +40,7 @@ app.post('/save', (req, res) => {
 });
 
 // Route to handle loading data
-app.get('/load', (req, res) => {
+router.get('/load', (req, res) => {
     fs.readFile(path.join(__dirname, 'data.csv'), 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading CSV file:', err);
@@ -59,7 +53,7 @@ app.get('/load', (req, res) => {
 });
 
 // Route to handle creating a backup
-app.post('/createBackup', (req, res) => {
+router.post('/createBackup', (req, res) => {
     const { backupName, data } = req.body;
     const header = ['libMenu', 'Non-Membre', 'Membre', 'Prix Non-Membre', 'Prix Membre']; // Define the header row
     const csvData = [header, ...data]; // Include the header row in the data
@@ -82,19 +76,16 @@ app.post('/createBackup', (req, res) => {
 });
 
 // Catch-all route to serve index.html
-app.get('*', (req, res) => {
+router.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/index.html'));
 });
 
-// Function to get local IP address
-function getLocalIpAddress() {
-    const interfaces = os.networkInterfaces();
-    for (const name of Object.keys(interfaces)) {
-        for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal) {
-                return iface.address;
-            }
-        }
-    }
-    return '127.0.0.1';
-};
+app.use('/', router);
+
+//Start the server
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, '127.0.0.1', () => {
+  console.log(`SheetVentes Server running at http://localhost:${PORT}`);
+});
+
+export default router;

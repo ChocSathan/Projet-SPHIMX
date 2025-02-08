@@ -149,7 +149,7 @@ function createBackup() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Backup created successfully:', data);
+        console.alert('Backup created successfully:', data);
     })
     .catch((error) => {
         console.error('Error creating backup:', error);
