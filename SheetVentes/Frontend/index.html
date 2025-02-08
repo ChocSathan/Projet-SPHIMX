@@ -7,20 +7,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <button onclick="window.location.href='http://127.0.0.1:3000'">Return to Hub</button>
+    <button onclick="window.location.href='http://127.0.0.1:3000'">Revenir au Menu Principal</button>
     <h1>Sheet Ventes SPHIMX</h1>
     <button id="editorButton" onclick="toggleEditor()">Activer/Desactiver Mode Editeur</button>
-    <div id="editorMenu">RemoveMenu
+    <div id="editorMenu">
     <div>
     <input type="text" id="inputAddMenuName" onkeydown="pressAddMenu()" placeholder="Entrez Nom du Menu"><br>
     <input type="number" class="numberInput" id="inputAddMenuPriceNonMembre" onkeydown="pressAddMenu()" placeholder="Prix Non-Membres">
-    <button id="addMenu" onclick="addMenu()">Add Menu</button><br>
+    <button id="addMenu" onclick="addMenu()">Ajoute Menu</button><br>
     <input type="number" class="numberInput" id="inputAddMenuPriceMembre" onkeydown="pressAddMenu()" placeholder="Prix Membres"><br>
     </div>
     <select id="selectRemoveMenu"></select>
-    <button id="removeMenu" onclick="removeMenu()">Remove Menu</button><br>
+    <button id="removeMenu" onclick="removeMenu()">Retire Menu</button><br>
     <input type="text" id="inputBackupName" onkeydown="pressCreateBackup()" placeholder="Entrez Nom du Backup">
-    <button id="createBackup" onclick="createBackup()">Create Backup</button><br>
+    <button id="createBackup" onclick="createBackup()">Créer Backup</button><br>
     </div>
     <table id="table" border="1">
         <thead>
@@ -58,7 +58,7 @@
     <table id="revenues" border="1">
         <thead>
             <tr>
-                <th>revenues</th>
+                <th>Revenues</th>
             </tr>
         </thead>
         <tbody>
