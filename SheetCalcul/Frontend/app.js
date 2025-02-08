@@ -191,9 +191,10 @@ function loadBackupOptions() {
             const select = document.getElementById('selectAddBackup');
             select.innerHTML = ''; // Clear existing options
             data.forEach(backupName => {
+                const displayName = backupName.split('_').slice(0, -1).join('_'); // Remove the date part
                 const option = document.createElement('option');
                 option.value = backupName;
-                option.textContent = backupName;
+                option.textContent = displayName;
                 select.appendChild(option);
                 console.log('Loaded backup option:', option);
             });
@@ -207,14 +208,15 @@ function loadRemoveBackupOptions() {
         .then(data => {
             const select = document.getElementById('selectRemoveBackup');
             select.innerHTML = ''; // Clear existing options
-            option = document.createElement('option');
-            option.value = '';
-            option.textContent = '---';
-            select.appendChild(option);
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '---';
+            select.appendChild(defaultOption);
             data.forEach(backupName => {
+                const displayName = backupName.split('_').slice(0, -1).join('_'); // Remove the date part
                 const option = document.createElement('option');
                 option.value = backupName;
-                option.textContent = backupName;
+                option.textContent = displayName;
                 select.appendChild(option);
             });
         })

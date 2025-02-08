@@ -165,12 +165,13 @@ app.get('/load_quantity', async (req, res) => {
         let currentBackup = null;
         for (let index = 0; index < rows.length; index++) {
             const row = rows[index];
-            if (row[0] === currentBackup) {
+            const backupName = row[0].split('_').slice(0, -1).join('_'); // Remove the date part
+            if (backupName === currentBackup) {
                 rows[index] = [row[1], row[2], row[3], (parseInt(row[2]) + parseInt(row[3])).toString()];
             } else {
-                currentBackup = row[0];
+                currentBackup = backupName;
                 let totalBackup = await totalQBackup(row[0]);
-                rows[index] = [row[0], row[1], row[2], row[3], (parseInt(row[2]) + parseInt(row[3])).toString(), totalBackup];
+                rows[index] = [backupName, row[1], row[2], row[3], (parseInt(row[2]) + parseInt(row[3])).toString(), totalBackup];
             }
         }
         res.json(rows);
@@ -207,12 +208,13 @@ app.get('/load_revenues', async (req, res) => {
         let currentBackup = null;
         for (let index = 0; index < rows.length; index++) {
             const row = rows[index];
-            if (row[0] === currentBackup) {
+            const backupName = row[0].split('_').slice(0, -1).join('_'); // Remove the date part
+            if (backupName === currentBackup) {
                 rows[index] = [row[1], (parseInt(row[2]) * parseFloat(row[4])).toFixed(2).toString(), (parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), (parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString()];
             } else {
-                currentBackup = row[0];
+                currentBackup = backupName;
                 let totalBackup = await totalRBackup(row[0]);
-                rows[index] = [row[0], row[1], (parseInt(row[2]) * parseFloat(row[4])).toFixed(2).toString(), (parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), (parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), totalBackup];
+                rows[index] = [backupName, row[1], (parseInt(row[2]) * parseFloat(row[4])).toFixed(2).toString(), (parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), (parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), totalBackup];
             }
         }
         res.json(rows);
@@ -294,6 +296,5 @@ app.get('*', (req, res) => {
 //Start the server
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, '127.0.0.1', () => {
-  const localIp = getLocalIpAddress();
   console.log(`Server running at http://localhost:${PORT}`);
 });

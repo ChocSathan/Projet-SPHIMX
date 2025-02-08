@@ -64,7 +64,13 @@ app.post('/createBackup', (req, res) => {
     const header = ['libMenu', 'Non-Membre', 'Membre', 'Prix Non-Membre', 'Prix Membre']; // Define the header row
     const csvData = [header, ...data]; // Include the header row in the data
     const csv = papaparse.unparse(csvData);
-    const backupPath = path.join(__dirname, 'backups', `${backupName}.csv`);
+
+    // Get the current date and time
+    const now = new Date();
+    const formattedDate = `${now.getFullYear()}:${String(now.getMonth() + 1).padStart(2, '0')}:${String(now.getDate()).padStart(2, '0')}:${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    // Include the formatted date in the backup name
+    const backupPath = path.join(__dirname, 'backups', `${backupName}_${formattedDate}.csv`);
     
     fs.writeFile(backupPath, csv, (err) => {
         if (err) {

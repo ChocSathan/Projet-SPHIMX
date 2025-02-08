@@ -9,13 +9,14 @@ h1 {
     color: #ffffff;
 }
 
-input[type="text"] {
-    padding: 1%;
-    margin: 10px 0;
-    width: 200px;
+input[type="text"], input[type="number"], select {
+    margin: 5px 0;
+    width: 200px; /* Set the same width for all inputs and select */
+    padding: 0.5%;
     background-color: #333;
     color: #e0e0e0;
     border: 1px solid #444;
+    font-size: 1em;
 }
 
 button {
@@ -99,4 +100,24 @@ footer {
     margin-top: 5%;
     background-color: #333;
     color: #e0e0e0;
+}
+
+.numberInput {
+    margin: 5px 0;
+    width: 180px;
+    padding: 0.5%;
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    font-size: 1em;
+}
+
+select {
+    margin: 5px 0;
+    width: 190px;
+    padding: 0.5%;
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    font-size: 1em;
 }

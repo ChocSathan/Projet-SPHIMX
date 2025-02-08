@@ -7,6 +7,7 @@ function add() {
     // Save the data
     save();
     calculateRevenues();
+    populateRemoveMenuOptions();
 }
 
 function remove() {
@@ -19,11 +20,13 @@ function remove() {
         // Save the data
         save();
         calculateRevenues();
+        populateRemoveMenuOptions();
     }
 }
 
 function removeMenu() {
-    let menuName = document.getElementById('inputRemoveMenu').value.trim();
+    let select = document.getElementById('selectRemoveMenu');
+    let menuName = select.value;
     let table = document.getElementById('table');
 
     if (menuName === '') {
@@ -33,6 +36,7 @@ function removeMenu() {
         }
         save();
         calculateRevenues();
+        populateRemoveMenuOptions();
         return;
     }
 
@@ -44,12 +48,34 @@ function removeMenu() {
             found = true;
             save();
             calculateRevenues();
+            populateRemoveMenuOptions();
             break;
         }
     }
 
     if (!found) {
         alert('Menu not found');
+    }
+}
+
+function populateRemoveMenuOptions() {
+    let select = document.getElementById('selectRemoveMenu');
+    let table = document.getElementById('table');
+    select.innerHTML = ''; // Clear existing options
+
+    // Add default option
+    let defaultOption = document.createElement('option');
+    defaultOption.value = '';
+    defaultOption.text = '---';
+    select.appendChild(defaultOption);
+
+    // Populate options with menu names
+    for (let i = 1; i < table.rows.length; i++) {
+        let row = table.rows[i];
+        let option = document.createElement('option');
+        option.value = row.cells[0].innerText;
+        option.text = row.cells[0].innerText;
+        select.appendChild(option);
     }
 }
 
@@ -81,6 +107,7 @@ function addMenu() {
     cell5.appendChild(document.createTextNode(priceMembre));
     save();
     calculateRevenues();
+    populateRemoveMenuOptions();
 }
 
 function createBackup() {
@@ -212,18 +239,21 @@ function load() {
         // Populate table with loaded data
         data.forEach((rowData, rowIndex) => {
             let row = table.insertRow();
-            rowData.slice(0, 3).forEach((cellData, cellIndex) => { // Only process the first 3 columns
+            rowData.forEach((cellData, cellIndex) => {
                 let cell = row.insertCell();
                 if (cellIndex === 0) {
                     cell.appendChild(document.createTextNode(cellData));
-                } else {
+                } else if (cellIndex === 1 || cellIndex === 2) {
                     cell.innerHTML = `${cellData}<br>
                         <button id="addButton" onclick="add()">+</button>
                         <button id="removeButton" onclick="remove()">-</button>`;
+                } else {
+                    cell.appendChild(document.createTextNode(cellData));
                 }
             });
         });
         calculateRevenues();
+        populateRemoveMenuOptions(); // Ensure options are populated after loading data
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -241,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load data from the server
     load();
     calculateRevenues();
+    populateRemoveMenuOptions();
 });
 
 function toggleEditor() {
@@ -258,12 +289,14 @@ function calculateRevenues() {
 
     for (let i = 1; i < table.rows.length; i++) {
         let row = table.rows[i];
-        let nonMembreCount = parseInt(row.cells[1].childNodes[0].nodeValue);
-        let membreCount = parseInt(row.cells[2].childNodes[0].nodeValue);
-        let priceNonMembre = parseFloat(row.cells[3].childNodes[0].nodeValue);
-        let priceMembre = parseFloat(row.cells[4].childNodes[0].nodeValue);
+        if (row.cells.length >= 5) { // Ensure there are enough cells
+            let nonMembreCount = parseInt(row.cells[1].childNodes[0].nodeValue);
+            let membreCount = parseInt(row.cells[2].childNodes[0].nodeValue);
+            let priceNonMembre = parseFloat(row.cells[3].childNodes[0].nodeValue);
+            let priceMembre = parseFloat(row.cells[4].childNodes[0].nodeValue);
 
-        total += (nonMembreCount * priceNonMembre) + (membreCount * priceMembre);
+            total += (nonMembreCount * priceNonMembre) + (membreCount * priceMembre);
+        }
     }
 
     document.getElementById('total').innerText = total.toFixed(2);
