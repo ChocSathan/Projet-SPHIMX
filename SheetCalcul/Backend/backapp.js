@@ -5,7 +5,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import os from 'os';
-import { finished } from 'stream';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -54,10 +53,10 @@ function totalRBackup(backupName) {
             const rows = parsedData.slice(1);
             rows.forEach(row => {
                 if (row[0] === backupName) {
-                    total += parseInt(row[2]) * parseInt(row[4]) + parseInt(row[3]) * parseInt(row[5]);
+                    total += parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5]);
                 }
             });
-            let newTotal = total.toString();
+            let newTotal = total.toFixed(2).toString();
             resolve(newTotal);
         });
     });
@@ -181,6 +180,24 @@ app.get('/load_quantity', async (req, res) => {
     }
 });
 
+app.get('/load_total_quantity', async (req, res) => {
+    try {
+        const data = fs.readFileSync(path.join(__dirname, 'data.csv'), 'utf8');
+        const parsedData = papaparse.parse(data, { skipEmptyLines: true }).data;
+        const rows = parsedData.slice(1);
+        let totals = [0, 0, 0];
+        rows.forEach(row => {
+            totals[0] += parseInt(row[2]);
+            totals[1] += parseInt(row[3]);
+            totals[2] += parseInt(row[2]) + parseInt(row[3]);
+        });
+        res.json(totals.map(total => total.toString()));
+    } catch (error) {
+        console.error('Error loading total quantity data:', error);
+        res.status(500).json({ error: 'Failed to load data' });
+    }
+});
+
 // Route to handle loading data
 app.get('/load_revenues', async (req, res) => {
     try {
@@ -191,11 +208,11 @@ app.get('/load_revenues', async (req, res) => {
         for (let index = 0; index < rows.length; index++) {
             const row = rows[index];
             if (row[0] === currentBackup) {
-                rows[index] = [row[1], (parseInt(row[2]) * parseInt(row[4])).toString(), (parseInt(row[3]) * parseInt(row[5])).toString(), (parseInt(row[2]) * parseInt(row[4]) + parseInt(row[3]) * parseInt(row[5])).toString()];
+                rows[index] = [row[1], (parseInt(row[2]) * parseFloat(row[4])).toFixed(2).toString(), (parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), (parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString()];
             } else {
                 currentBackup = row[0];
                 let totalBackup = await totalRBackup(row[0]);
-                rows[index] = [row[0], row[1], (parseInt(row[2]) * parseInt(row[4])).toString(), (parseInt(row[3]) * parseInt(row[5])).toString(), (parseInt(row[2]) * parseInt(row[4]) + parseInt(row[3]) * parseInt(row[5])).toString(), totalBackup];
+                rows[index] = [row[0], row[1], (parseInt(row[2]) * parseFloat(row[4])).toFixed(2).toString(), (parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), (parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5])).toFixed(2).toString(), totalBackup];
             }
         }
         res.json(rows);
@@ -205,27 +222,78 @@ app.get('/load_revenues', async (req, res) => {
     }
 });
 
+app.get('/load_total_revenues', async (req, res) => {
+    try {
+        const data = fs.readFileSync(path.join(__dirname, 'data.csv'), 'utf8');
+        const parsedData = papaparse.parse(data, { skipEmptyLines: true }).data;
+        const rows = parsedData.slice(1);
+        let totals = [0, 0, 0];
+        rows.forEach(row => {
+            totals[0] += parseInt(row[2]) * parseFloat(row[4]);
+            totals[1] += parseInt(row[3]) * parseFloat(row[5]);
+            totals[2] += (parseInt(row[2]) * parseFloat(row[4])) + (parseInt(row[3]) * parseFloat(row[5]));
+        });
+        res.json(totals.map(total => total.toFixed(2).toString()));
+    } catch (error) {
+        console.error('Error loading total revenues data:', error);
+        res.status(500).json({ error: 'Failed to load data' });
+    }
+});
+
+app.get('/load_backup_options', (req, res) => {
+    const backupsDir = path.join(__dirname, '../../SheetVentes/Backend/backups');
+    fs.readdir(backupsDir, (err, files) => {
+        if (err) {
+            console.error('Error reading backups directory:', err);
+            return res.status(500).json({ error: 'Failed to load backup options' });
+        }
+        const backupNames = files.map(file => path.basename(file, '.csv'));
+        res.json(backupNames);
+    });
+});
+
+app.get('/load_remove_backup_options', (req, res) => {
+    fs.readFile(path.join(__dirname, 'data.csv'), 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading CSV file:', err);
+            return res.status(500).json({ error: 'Failed to load data' });
+        }
+        const parsedData = papaparse.parse(data, { skipEmptyLines: true }).data;
+        const backupNames = [...new Set(parsedData.slice(1).map(row => row[0]))];
+        res.json(backupNames);
+    });
+});
+
+app.get('/load_benef', async (req, res) => {
+    try {
+        const cost = parseFloat(req.query.cost) || 0; // Ensure cost is a number
+        const data = fs.readFileSync(path.join(__dirname, 'data.csv'), 'utf8');
+        const parsedData = papaparse.parse(data, { skipEmptyLines: true }).data;
+        const rows = parsedData.slice(1);
+        let revenuesTotal = 0;
+        rows.forEach(row => {
+            revenuesTotal += parseInt(row[2]) * parseFloat(row[4]) + parseInt(row[3]) * parseFloat(row[5]);
+        });
+        const benefTotal = revenuesTotal - cost;
+        res.json({
+            revenuesTotal: revenuesTotal.toFixed(2).toString(),
+            coutTotal: cost.toFixed(2).toString(),
+            benefTotal: benefTotal.toFixed(2).toString()
+        });
+    } catch (error) {
+        console.error('Error loading benefit data:', error);
+        res.status(500).json({ error: 'Failed to load data' });
+    }
+});
+
 // Catch-all route to serve index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend/index.html'));
 });
 
-// Function to get local IP address
-function getLocalIpAddress() {
-    const interfaces = os.networkInterfaces();
-    for (const name of Object.keys(interfaces)) {
-        for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal) {
-                return iface.address;
-            }
-        }
-    }
-    return '127.0.0.1';
-};
-
 //Start the server
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+server.listen(PORT, '127.0.0.1', () => {
   const localIp = getLocalIpAddress();
-  console.log(`Server running at http://${localIp}:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });

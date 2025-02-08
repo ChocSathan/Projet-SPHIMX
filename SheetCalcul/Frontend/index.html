@@ -9,9 +9,9 @@
 <body>
     <h1>Sheet Calcul SPHIMX</h1>
     <div id="editorMenu">
-        <input type="text" id="inputAddBackup" onkeydown="pressAddBackup()" placeholder="Entrez Nom du Backup">
+        <select id="selectAddBackup"></select>
         <button id="removeMenu" onclick="addBackup()">Add Backup</button><br>
-        <input type="text" id="inputRemoveBackup" onkeydown="pressRemoveBackup()" placeholder="Entrez Nom du Backup">
+        <select id="selectRemoveBackup"></select>
         <button id="removeMenu" onclick="removeBackup()">Remove Backup</button><br>
     </div>
     <table id="quantité" class="table" border="1">
@@ -115,7 +115,7 @@
         <tbody>
             <tr>
                 <td id="revenuesTotal">0</td>
-                <td id="coutTotal"><input type="number"></td>
+                <td id="coutTotal"><input id="cout" type="number" value="0" oninput="updateBenef()"></td>
                 <td id="benefTotal">0</td>
             </tr>
         </tbody>

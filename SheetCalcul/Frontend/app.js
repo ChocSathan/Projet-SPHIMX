@@ -1,5 +1,5 @@
 function addBackup() {
-    const backupName = document.getElementById('inputAddBackup').value;
+    const backupName = document.getElementById('selectAddBackup').value;
     if (backupName) {
         fetch('/add_backup', {
             method: 'POST',
@@ -18,13 +18,13 @@ function addBackup() {
         })
         .catch(error => console.error('Error adding backup:', error));
     } else {
-        alert('Please enter a backup name');
+        alert('Please select a backup');
     }
 }
 
 function removeBackup() {
-    const backupName = document.getElementById('inputRemoveBackup').value;
--   fetch('/remove_backup', {
+    const backupName = document.getElementById('selectRemoveBackup').value;
+    fetch('/remove_backup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -45,6 +45,9 @@ function removeBackup() {
 function reload() {
     load_quantity();
     load_revenues();
+    loadBackupOptions();
+    loadRemoveBackupOptions();
+    loadBenef();
 }
 
 function pressAddBackup() {
@@ -102,6 +105,22 @@ function load_quantity() {
             });
         })
         .catch(error => console.error('Error loading quantity data:', error));
+
+    fetch('/load_total_quantity')
+        .then(response => response.json())
+        .then(data => {
+            const tableFoot = document.querySelector('#quantité tfoot');
+            tableFoot.innerHTML = ''; // Clear existing rows
+            const totalRow = document.createElement('tr');
+            totalRow.innerHTML = `
+                <td id="libTotal" colspan="2">Totals</td>
+                <td id="totalNonMembres">${data[0]}</td>
+                <td id="totalMembres">${data[1]}</td>
+                <td id="totals" colspan="2">${data[2]}</td>
+            `;
+            tableFoot.appendChild(totalRow);
+        })
+        .catch(error => console.error('Error loading total quantity data:', error));
 };
 
 function load_revenues() {
@@ -147,7 +166,66 @@ function load_revenues() {
             });
         })
         .catch(error => console.error('Error loading revenues data:', error));
+
+    fetch('/load_total_revenues')
+        .then(response => response.json())
+        .then(data => {
+            const tableFoot = document.querySelector('#revenues tfoot');
+            tableFoot.innerHTML = ''; // Clear existing rows
+            const totalRow = document.createElement('tr');
+            totalRow.innerHTML = `
+                <td id="libTotal" colspan="2">Totals</td>
+                <td id="totalNonMembres">${data[0]}€</td>
+                <td id="totalMembres">${data[1]}€</td>
+                <td id="totals" colspan="2">${data[2]}€</td>
+            `;
+            tableFoot.appendChild(totalRow);
+        })
+        .catch(error => console.error('Error loading total revenues data:', error));
 };
+
+function loadBackupOptions() {
+    fetch('/load_backup_options')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('selectAddBackup');
+            select.innerHTML = ''; // Clear existing options
+            data.forEach(backupName => {
+                const option = document.createElement('option');
+                option.value = backupName;
+                option.textContent = backupName;
+                select.appendChild(option);
+                console.log('Loaded backup option:', option);
+            });
+        })
+        .catch(error => console.error('Error loading backup options:', error));
+}
+
+function loadRemoveBackupOptions() {
+    fetch('/load_remove_backup_options')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('selectRemoveBackup');
+            select.innerHTML = ''; // Clear existing options
+            option = document.createElement('option');
+            option.value = '';
+            option.textContent = '---';
+            select.appendChild(option);
+            data.forEach(backupName => {
+                const option = document.createElement('option');
+                option.value = backupName;
+                option.textContent = backupName;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error loading remove backup options:', error));
+}
+
+function updateBenef() {
+    const cout = parseFloat(document.getElementById('cout').value) || 0;
+    document.getElementById('revenuesTotal').textContent = document.getElementById('totals').textContent;
+    document.getElementById('benefTotal').textContent = (parseFloat(document.getElementById('revenuesTotal').textContent) - cout).toFixed(2);
+}
 
 // Ensure the table element exists in the DOM
 document.addEventListener('DOMContentLoaded', () => {
@@ -158,6 +236,5 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Table element found on DOMContentLoaded');
     }
     // Load data from the server
-    load_quantity();
-    load_revenues();
+    reload();
 });

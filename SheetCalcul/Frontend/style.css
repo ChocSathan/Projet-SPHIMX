@@ -39,6 +39,16 @@ button {
     font-size: 0.9em;
 }
 
+#editorMenu select {
+    padding: 0.5%;
+    margin: 5px 0;
+    width: 180px;
+    font-size: 0.9em;
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
 #editorMenu button {
     padding: 0.5% 5px;
     margin: 3px;
@@ -93,4 +103,20 @@ button#removeButton {
 
 footer {
     margin-top: 30%;
+}
+
+caption {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+#cout {
+    width: 100px;
+    padding: 0.5%;
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    font-size: 1em;
 }
