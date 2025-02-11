@@ -116,7 +116,7 @@ function load_quantity() {
                 <td id="libTotal" colspan="2">Totals</td>
                 <td id="totalNonMembres">${data[0]}</td>
                 <td id="totalMembres">${data[1]}</td>
-                <td id="totals" colspan="2">${data[2]}</td>
+                <td id="Qtotals" colspan="2">${data[2]}</td>
             `;
             tableFoot.appendChild(totalRow);
         })
@@ -177,7 +177,7 @@ function load_revenues() {
                 <td id="libTotal" colspan="2">Totals</td>
                 <td id="totalNonMembres">${data[0]}€</td>
                 <td id="totalMembres">${data[1]}€</td>
-                <td id="totals" colspan="2">${data[2]}€</td>
+                <td id="Rtotals" colspan="2">${data[2]}€</td>
             `;
             tableFoot.appendChild(totalRow);
         })
@@ -225,8 +225,9 @@ function loadRemoveBackupOptions() {
 
 function updateBenef() {
     const cout = parseFloat(document.getElementById('cout').value) || 0;
-    document.getElementById('revenuesTotal').textContent = document.getElementById('totals').textContent;
-    document.getElementById('benefTotal').textContent = (parseFloat(document.getElementById('revenuesTotal').textContent) - cout).toFixed(2);
+    document.getElementById('revenuesTotal').textContent = document.getElementById('Rtotals').textContent;
+    const benef = (parseFloat(document.getElementById('revenuesTotal').textContent) - cout).toFixed(2);
+    document.getElementById('benefTotal').textContent = benef + "€";
 }
 
 // Ensure the table element exists in the DOM
